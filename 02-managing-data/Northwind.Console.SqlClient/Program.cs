@@ -3,6 +3,7 @@ using System.Data;
 using System.Text.Json;
 using System.IO;
 using Northwind.Models;
+using Dapper;
 
 ConfigureConsole("ro-RO");
 SqlConnectionStringBuilder builder = new()
@@ -253,4 +254,32 @@ if (key is ConsoleKey.D2 or ConsoleKey.NumPad2)
 }
 
 OutputStatistics(connection);
+
+WriteLineInColor("Using Dapper", ConsoleColor.DarkGreen);
+connection.ResetStatistics(); // So we can compare using Dapper.
+IEnumerable<Supplier> suppliers = connection.Query<Supplier>(
+sql: "SELECT * FROM Suppliers WHERE Country=@Country",
+param: new { Country = "Germany" });
+foreach (Supplier s in suppliers)
+{
+    WriteLine("{0}: {1}, {2}, {3}",
+    s.SupplierId, s.CompanyName, s.City, s.Country);
+}
+WriteLineInColor(JsonSerializer.Serialize(suppliers),
+ConsoleColor.Green);
+OutputStatistics(connection);
+
+
+IEnumerable<Product> productsFromDapper =
+connection.Query<Product>(sql: "GetExpensiveProducts",
+param: new { price = 100M, count = 0 },
+commandType: CommandType.StoredProcedure);
+foreach (Product p in productsFromDapper)
+{
+    WriteLine("{0}: {1}, {2}",
+    p.ProductId, p.ProductName, p.UnitPrice);
+}
+WriteLineInColor(JsonSerializer.Serialize(productsFromDapper),
+ConsoleColor.Green);
+
 await connection.CloseAsync();
