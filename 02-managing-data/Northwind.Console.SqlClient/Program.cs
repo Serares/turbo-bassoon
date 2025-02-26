@@ -164,21 +164,21 @@ cmd.CommandType = CommandType.Text;
 cmd.CommandText = "SELECT ProductId, ProductName, UnitPrice FROM Products WHERE UnitPrice >= @minimumPrice";
 cmd.Parameters.AddWithValue("minimumPrice", price);
 
-SqlDataReader r = cmd.ExecuteReader();
+SqlDataReader r = await cmd.ExecuteReaderAsync();
 string horizontalLine = new string('-', 60);
 WriteLine(horizontalLine);
 WriteLine("| {0,5} | {1,-35} | {2,10} |",
 arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
-while (r.Read())
+while (await r.ReadAsync())
 {
     WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
-    r.GetInt32("ProductId"),
-    r.GetString("ProductName"),
-    r.GetDecimal("UnitPrice"));
+    await r.GetFieldValueAsync<int>("ProductId"),
+    await r.GetFieldValueAsync<string>("ProductName"),
+    await r.GetFieldValueAsync<decimal>("UnitPrice"));
 }
 WriteLine(horizontalLine);
-r.Close();
+await r.CloseAsync();
 
 OutputStatistics(connection);
-connection.Close();
+await connection.CloseAsync();
