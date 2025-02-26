@@ -180,4 +180,5 @@ while (r.Read())
 WriteLine(horizontalLine);
 r.Close();
 
+OutputStatistics(connection);
 connection.Close();
