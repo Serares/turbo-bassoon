@@ -210,12 +210,27 @@ WriteLine(horizontalLine);
 WriteLine("| {0,5} | {1,-35} | {2,10} |",
 arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
-while (await r.ReadAsync())
+string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), Constants.JSON_FILE);
+
+await using (FileStream jsonStream = File.Create(jsonPath))
 {
-    WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
-    await r.GetFieldValueAsync<int>("ProductId"),
-    await r.GetFieldValueAsync<string>("ProductName"),
-    await r.GetFieldValueAsync<decimal>("UnitPrice"));
+    Utf8JsonWriter jsonWriter = new(jsonStream);
+    jsonWriter.WriteStartArray();
+    while (await r.ReadAsync())
+    {
+        WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
+        await r.GetFieldValueAsync<int>("ProductId"),
+        await r.GetFieldValueAsync<string>("ProductName"),
+        await r.GetFieldValueAsync<decimal>("UnitPrice"));
+        jsonWriter.WriteStartObject();
+        jsonWriter.WriteNumber("ProductId", await r.GetFieldValueAsync<int>("ProductId"));
+        jsonWriter.WriteString("ProductName", await r.GetFieldValueAsync<string>("ProductName"));
+        jsonWriter.WriteNumber("UnitPrice", await r.GetFieldValueAsync<decimal>("UnitPrice"));
+        jsonWriter.WriteEndObject();
+    }
+    jsonWriter.WriteEndArray();
+    jsonWriter.Flush();
+    jsonStream.Close();
 }
 WriteLine(horizontalLine);
 await r.CloseAsync();
