@@ -2,6 +2,7 @@
 using System.Data;
 using System.Text.Json;
 using System.IO;
+using Northwind.Models;
 
 ConfigureConsole("ro-RO");
 SqlConnectionStringBuilder builder = new()
@@ -211,6 +212,7 @@ WriteLine("| {0,5} | {1,-35} | {2,10} |",
 arg0: "Id", arg1: "Name", arg2: "Price");
 WriteLine(horizontalLine);
 string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), Constants.JSON_FILE);
+List<Product> products = new(capacity: 77);
 
 await using (FileStream jsonStream = File.Create(jsonPath))
 {
@@ -218,6 +220,13 @@ await using (FileStream jsonStream = File.Create(jsonPath))
     jsonWriter.WriteStartArray();
     while (await r.ReadAsync())
     {
+        Product product = new()
+        {
+            ProductId = await r.GetFieldValueAsync<int>("ProductId"),
+            ProductName = await r.GetFieldValueAsync<string>("ProductName"),
+            UnitPrice = await r.GetFieldValueAsync<decimal>("UnitPrice")
+        };
+        products.Add(product);
         WriteLine("| {0,5} | {1,-35} | {2,10:C} |",
         await r.GetFieldValueAsync<int>("ProductId"),
         await r.GetFieldValueAsync<string>("ProductName"),
@@ -233,6 +242,7 @@ await using (FileStream jsonStream = File.Create(jsonPath))
     jsonStream.Close();
 }
 WriteLine(horizontalLine);
+WriteLineInColor(JsonSerializer.Serialize(products), ConsoleColor.Green);
 await r.CloseAsync();
 
 
