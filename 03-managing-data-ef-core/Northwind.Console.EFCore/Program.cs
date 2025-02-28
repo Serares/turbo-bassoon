@@ -87,6 +87,7 @@ options.UseSqlServer(builder.ConnectionString);
 
 using (NorthwindDb db = new(options.Options))
 {
+    // db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
   Write("Enter a unit price: ");
   string? priceText = ReadLine();
 
@@ -98,6 +99,8 @@ using (NorthwindDb db = new(options.Options))
 
   // We have to use var because we are projecting into an anonymous type.
   var products = db.Products
+    // .AsNoTracking()
+    // .AsNoTrackingWithIdentityResolution()
     .Where(p => p.UnitPrice > price)
     .Select(p => new { p.ProductId, p.ProductName, p.UnitPrice });
 
