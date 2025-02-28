@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Console.EFCore", "Northwind.Console.EFCore\Northwind.Console.EFCore.csproj", "{C77BA577-DF81-4F6A-AD29-A86E300ADFBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Console.HierarchyMapping", "Northwind.Console.HierarchyMapping\Northwind.Console.HierarchyMapping.csproj", "{F9285E68-7648-473D-901C-4578C0DDEBBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{C77BA577-DF81-4F6A-AD29-A86E300ADFBA}.Release|x64.Build.0 = Release|Any CPU
 		{C77BA577-DF81-4F6A-AD29-A86E300ADFBA}.Release|x86.ActiveCfg = Release|Any CPU
 		{C77BA577-DF81-4F6A-AD29-A86E300ADFBA}.Release|x86.Build.0 = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|x64.Build.0 = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9285E68-7648-473D-901C-4578C0DDEBBB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
