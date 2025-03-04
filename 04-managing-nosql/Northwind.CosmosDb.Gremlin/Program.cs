@@ -1,0 +1,3 @@
+﻿// await CreateCosmosGraphResources();
+
+await CreateProductVertices();
