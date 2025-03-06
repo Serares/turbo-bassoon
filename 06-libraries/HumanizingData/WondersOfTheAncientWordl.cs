@@ -1,0 +1,13 @@
+namespace Libraries.Shared;
+
+public enum WondersOfTheAncientWorld
+{
+    NONE = 0b_0000_0000,
+    GREAT_PYRAMID_OF_GIZA = 0b_0000_0001,
+    BAOBAB_TREE = 0b_0000_0010,
+    STATUE_OF_ZEUS = 0b_0000_0100,
+    TEMPLE_OF_ARTHEMIDE = 0b_0000_1000,
+    MAUSOLEUM_AT_HALICARNASSUS = 0b_0001_0000,
+    COLOSSEUM = 0b_0010_0000,
+
+}

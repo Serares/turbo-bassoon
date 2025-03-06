@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingWithImages", "WorkingWithImages\WorkingWithImages.csproj", "{67C3C0E2-0FCE-47FB-8612-EADE463F5391}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumanizingData", "HumanizingData\HumanizingData.csproj", "{9C8116D0-7813-461B-84D8-D87B991A053B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{67C3C0E2-0FCE-47FB-8612-EADE463F5391}.Release|x64.Build.0 = Release|Any CPU
 		{67C3C0E2-0FCE-47FB-8612-EADE463F5391}.Release|x86.ActiveCfg = Release|Any CPU
 		{67C3C0E2-0FCE-47FB-8612-EADE463F5391}.Release|x86.Build.0 = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Debug|x86.Build.0 = Debug|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|x64.Build.0 = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C8116D0-7813-461B-84D8-D87B991A053B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
