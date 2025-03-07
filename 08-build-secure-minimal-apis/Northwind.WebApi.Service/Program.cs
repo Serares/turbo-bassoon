@@ -27,7 +27,8 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwaggerUI();
 }
 
-app.UseCors(policyName: "Northwind.Mvc.Policy");
+// app.UseCors(policyName: "Northwind.Mvc.Policy");
+app.UseCors();
 
 app.MapGets()
 .MapPosts()
