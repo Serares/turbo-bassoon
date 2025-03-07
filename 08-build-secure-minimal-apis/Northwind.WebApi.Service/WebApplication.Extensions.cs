@@ -11,7 +11,7 @@ public static class WebApplicationExtensions
     public static WebApplication MapGets(this WebApplication app, int pageSize = 10)
     {
         app.MapGet("/", () => "Hello World!").ExcludeFromDescription();
-        app.MapGet("api/products", async (
+        app.MapGet("api/products/async", async (
             [FromServices] NorthwindContext db,
             [FromQuery] int? page) =>
             await db.Products.Where(p => p.UnitsInStock > 0 && !p.Discontinued)
@@ -20,7 +20,23 @@ public static class WebApplicationExtensions
             .Take(pageSize)
             .ToListAsync() // making the request async (non-blicking the thread)
             )
-            .WithName("GetProducts")
+            .WithName("GetProductsAsync")
+            .WithOpenApi(operation =>
+            {
+                operation.Description = "Get products with UnitsInStock";
+                operation.Summary = "Get in stock products that are not discontinued";
+                return operation;
+            })
+            .Produces<Product[]>(StatusCodes.Status200OK);
+            app.MapGet("api/products/sync", (
+            [FromServices] NorthwindContext db,
+            [FromQuery] int? page) =>
+            db.Products.Where(p => p.UnitsInStock > 0 && !p.Discontinued)
+            .OrderBy(product => product.ProductId)
+            .Skip(((page ?? 1) - 1) * pageSize)
+            .Take(pageSize)
+            )
+            .WithName("GetProductsSync")
             .WithOpenApi(operation =>
             {
                 operation.Description = "Get products with UnitsInStock";
