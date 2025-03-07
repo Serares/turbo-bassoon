@@ -9,6 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNorthwindContext();
 builder.Services.AddCustomHttpLogging();
+builder.Services.AddCustomCors();
 
 var app = builder.Build();
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(policyName: "Northwind.Mvc.Policy");
 
 app.MapGets()
 .MapPosts()

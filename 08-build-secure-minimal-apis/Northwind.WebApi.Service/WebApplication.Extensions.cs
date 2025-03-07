@@ -28,22 +28,22 @@ public static class WebApplicationExtensions
                 return operation;
             })
             .Produces<Product[]>(StatusCodes.Status200OK);
-            app.MapGet("api/products/sync", (
-            [FromServices] NorthwindContext db,
-            [FromQuery] int? page) =>
-            db.Products.Where(p => p.UnitsInStock > 0 && !p.Discontinued)
-            .OrderBy(product => product.ProductId)
-            .Skip(((page ?? 1) - 1) * pageSize)
-            .Take(pageSize)
-            )
-            .WithName("GetProductsSync")
-            .WithOpenApi(operation =>
-            {
-                operation.Description = "Get products with UnitsInStock";
-                operation.Summary = "Get in stock products that are not discontinued";
-                return operation;
-            })
-            .Produces<Product[]>(StatusCodes.Status200OK);
+        app.MapGet("api/products/sync", (
+        [FromServices] NorthwindContext db,
+        [FromQuery] int? page) =>
+        db.Products.Where(p => p.UnitsInStock > 0 && !p.Discontinued)
+        .OrderBy(product => product.ProductId)
+        .Skip(((page ?? 1) - 1) * pageSize)
+        .Take(pageSize)
+        )
+        .WithName("GetProductsSync")
+        .WithOpenApi(operation =>
+        {
+            operation.Description = "Get products with UnitsInStock";
+            operation.Summary = "Get in stock products that are not discontinued";
+            return operation;
+        })
+        .Produces<Product[]>(StatusCodes.Status200OK);
         app.MapGet("api/products/outofstock",
       ([FromServices] NorthwindContext db) => db.Products
         .Where(p => (p.UnitsInStock == 0) && (!p.Discontinued))
