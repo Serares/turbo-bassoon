@@ -11,7 +11,7 @@ public static class WebApplicationExtensions
     public static WebApplication MapGets(this WebApplication app, int pageSize = 10)
     {
         app.MapGet("/", () => "Hello World!").ExcludeFromDescription(); // won't appear in swagger doc
-        app.MapGet("api/products/async", async (
+        app.MapGet("api/products", async (
             [FromServices] NorthwindContext db,
             [FromQuery] int? page) =>
             await db.Products.Where(p => p.UnitsInStock > 0 && !p.Discontinued)
@@ -20,7 +20,7 @@ public static class WebApplicationExtensions
             .Take(pageSize)
             .ToListAsync() // making the request async (non-blicking the thread)
             )
-            .WithName("GetProductsAsync")
+            .WithName("GetProducts")
             .WithOpenApi(operation =>
             {
                 operation.Description = "Get products with UnitsInStock";

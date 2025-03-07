@@ -1,16 +1,35 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.WebApi.Client.Mvc.Models;
+using Northwind.EntityModels;
 
 namespace Northwind.WebApi.Client.Mvc.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly IHttpClientFactory _client;
+    public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
+        _client = httpClientFactory;
+    }
+
+    [Route("home/products/{name?}")]
+    public async Task<IActionResult> Products(string? name)
+    {
+        HttpClient client = _client.CreateClient(
+            name: "Northwind.WebApi.Service"
+        );
+
+        HttpRequestMessage request = new(
+            method: HttpMethod.Get, requestUri: $"api/products/{name}"
+        );
+        HttpResponseMessage response = await client.SendAsync(request);
+        IEnumerable<Product>? model = await response.Content.ReadFromJsonAsync<IEnumerable<Product>>();
+
+        ViewData["baseaddress"] = client.BaseAddress;
+        return View(model);
     }
 
     public IActionResult Index()

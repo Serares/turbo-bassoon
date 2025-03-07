@@ -1,7 +1,20 @@
+using System.Net.Http.Headers; // to use mediatypewithqualityheaderval
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient(name: "Northwind.WebApi.Service",
+configureClient: options =>
+{
+    options.BaseAddress = new("https://localhost:5081/");
+    options.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue(
+            "application/json", 1.0
+        )
+    );
+});
 
 var app = builder.Build();
 
