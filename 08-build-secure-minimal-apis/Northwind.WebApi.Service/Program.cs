@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddNorthwindContext();
 builder.Services.AddCustomHttpLogging();
 builder.Services.AddCustomCors();
+builder.Services.AddCustomRateLimiting(builder.Configuration);
 
 var app = builder.Build();
 
@@ -20,6 +21,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpLogging();
+await app.UseCustomClientRateLimiting();
 app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment()) {

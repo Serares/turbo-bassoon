@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http.HttpResults; // to use results
 using Microsoft.AspNetCore.Mvc; // to use [FromServices]
@@ -140,5 +141,18 @@ public static class WebApplicationExtensions
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status204NoContent);
         return app;
+    }
+
+    public static async Task UseCustomClientRateLimiting(this WebApplication app)
+    {
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            IClientPolicyStore clientPolicyStore = scope.ServiceProvider
+            .GetRequiredService<IClientPolicyStore>();
+
+            await clientPolicyStore.SeedAsync();
+        }
+
+        app.UseClientRateLimiting();
     }
 }
