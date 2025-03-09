@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults; // to use results
 using Microsoft.AspNetCore.Mvc; // to use [FromServices]
 using Microsoft.EntityFrameworkCore;
 using Northwind.EntityModels; // northwindcontext
+using System.Security.Claims;
 
 namespace WebApi.Extensions;
 
@@ -12,6 +13,10 @@ public static class WebApplicationExtensions
     public static WebApplication MapGets(this WebApplication app, int pageSize = 10)
     {
         app.MapGet("/", () => "Hello World!").ExcludeFromDescription(); // won't appear in swagger doc
+        app.MapGet("/secret", (ClaimsPrincipal user) => {
+          return string.Format("welcome, {0}. The secret is ...", user.Identity?.Name ?? "secure user");
+        }).RequireAuthorization();
+        
         app.MapGet("api/products", async (
             [FromServices] NorthwindContext db,
             [FromQuery] int? page) =>
