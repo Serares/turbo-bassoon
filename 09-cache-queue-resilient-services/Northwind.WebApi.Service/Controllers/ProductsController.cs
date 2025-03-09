@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory; // inmem cache
 using Microsoft.AspNetCore.Mvc; // To use [HttpGet] and so on.
 using Northwind.EntityModels; // To use NorthwindContext, Product.
 namespace Northwind.WebApi.Service.Controllers;
@@ -8,11 +9,16 @@ public class ProductsController : ControllerBase
     private int pageSize = 10;
     private readonly ILogger<ProductsController> _logger;
     private readonly NorthwindContext _db;
+    private readonly IMemoryCache _memoryCache;
+    private const string OutOfStockProductsKey = "OOSP";
     public ProductsController(ILogger<ProductsController> logger,
-    NorthwindContext context)
+    NorthwindContext context,
+    IMemoryCache memoryCache
+    )
     {
         _logger = logger;
         _db = context;
+        _memoryCache = memoryCache;
     }
     // GET: api/products
     [HttpGet]
@@ -31,8 +37,21 @@ public class ProductsController : ControllerBase
     [Produces(typeof(Product[]))]
     public IEnumerable<Product> GetOutOfStockProducts()
     {
-        return _db.Products
-        .Where(p => p.UnitsInStock == 0 && !p.Discontinued);
+        if (!_memoryCache.TryGetValue(OutOfStockProductsKey, out Product[]? cachedValue))
+        {
+            // get from db if not found in cache
+            cachedValue = _db.Products.Where(p => p.UnitsInStock == 0 && !p.Discontinued).ToArray();
+            MemoryCacheEntryOptions cachedEntryOptions = new()
+            {
+                SlidingExpiration = TimeSpan.FromSeconds(5),
+                Size = cachedValue?.Length
+            };
+            _memoryCache.Set(OutOfStockProductsKey, cachedValue, cachedEntryOptions);
+        }
+        MemoryCacheStatistics? stats = _memoryCache.GetCurrentStatistics();
+        _logger.LogInformation("Memory cache. Total hits: {TotalHits}, Estimated size: {EstimatedSize}", stats?.TotalHits, stats?.CurrentEstimatedSize);
+        
+        return cachedValue ?? Array.Empty<Product>();
     }
     // GET: api/products/discontinued
     [HttpGet]
@@ -93,4 +112,6 @@ public class ProductsController : ControllerBase
         }
         return NotFound();
     }
+
+
 }

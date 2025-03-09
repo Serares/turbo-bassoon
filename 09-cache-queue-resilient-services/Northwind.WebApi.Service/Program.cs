@@ -1,7 +1,15 @@
+using Microsoft.Extensions.Caching.Memory;
 using Northwind.EntityModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<IMemoryCache>(new MemoryCache(
+    new MemoryCacheOptions
+    {
+        TrackStatistics = true,
+        SizeLimit = 50
+    }
+));
 // Add services to the container.
 builder.Services.AddNorthwindContext();
 builder.Services.AddControllers();
