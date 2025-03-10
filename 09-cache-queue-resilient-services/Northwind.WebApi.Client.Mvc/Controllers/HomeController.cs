@@ -2,7 +2,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.WebApi.Client.Mvc.Models;
 using Northwind.EntityModels;
-using System.Collections;
+using RabbitMQ.Client; // Connection factory
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Metadata; // serializer
 
 namespace Northwind.WebApi.Client.Mvc.Controllers;
 
@@ -67,5 +69,76 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public IActionResult SendMEssage()
+    {
+        return View();
+    }
+
+    // POST : home/sendmessage
+    // Body: message=Hello&productId=1
+    [HttpPost]
+    public async Task<IActionResult> SendMessage(
+        string? message, int? productId
+    )
+    {
+        HomeSendMessageViewModel model = new();
+        model.Message = new();
+
+        if (message is null || productId is null)
+        {
+            model.Error = "Please enter a message and a product ID.";
+            return View(model);
+        }
+
+        model.Message.Text = message;
+        model.Message.Product = new()
+        {
+            ProductId = productId.Value
+        };
+        HttpClient client = _httpClientFactory.CreateClient(name: "Northwind.WebApi.Service");
+
+        HttpRequestMessage request = new(
+            method: HttpMethod.Get,
+            requestUri: $"api/products/{productId}"
+        );
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Product? product = await response.Content.ReadFromJsonAsync<Product>();
+            if (product is not null)
+            {
+                model.Message.Product = product;
+            }
+        }
+
+        // create a rabbitymq factory
+        ConnectionFactory factory = new() { HostName = "localhost" };
+        using IConnection connection = factory.CreateConnection();
+        using RabbitMQ.Client.IModel channel = connection.CreateModel();
+
+        string queueNameAndRoutingKey = "product";
+
+        // If the queue does not exist, it will be created.
+        // If the Docker container is restarted, the queue will be lost.
+        // The queue can be shared with multiple consumers.
+        // The queue will not be deleted when the last message is consumer.
+        channel.QueueDeclare(queue: queueNameAndRoutingKey, durable: false,
+            exclusive: false, autoDelete: false, arguments: null
+        );
+
+        byte[] body = JsonSerializer.SerializeToUtf8Bytes(model.Message);
+        // the exchange is empty because we are using the default exchange.
+        channel.BasicPublish(exchange: string.Empty,
+        routingKey: queueNameAndRoutingKey,
+        basicProperties: null,
+        body: body
+        );
+        model.Info = "Message sent to queue success";
+
+        return View(model);
     }
 }
