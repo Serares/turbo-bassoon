@@ -1,4 +1,4 @@
-namespace Northwind.Background.Handfier.Models;
+namespace Northwind.Background.Hangfire.Models;
 
 public class ErrorViewModel
 {

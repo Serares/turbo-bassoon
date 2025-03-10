@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Northwind.Background.Handfier.Models;
+using Northwind.Background.Hangfire.Models;
 
-namespace Northwind.Background.Handfier.Controllers;
+namespace Northwind.Background.Hangfire.Controllers;
 
 public class HomeController : Controller
 {
