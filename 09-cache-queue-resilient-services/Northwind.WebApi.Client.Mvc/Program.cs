@@ -1,8 +1,25 @@
+using Polly;
+using Polly.Contrib.WaitAndRetry;
+using Polly.Extensions.Http;
+using Polly.Retry;
 using System.Net.Http.Headers; // to use metiatypequalityhedaer
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// create jittered delays
+IEnumerable<TimeSpan> delays = Backoff.DecorrelatedJitterBackoffV2(
+    medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: 5
+);
+WriteLine("Jittered delays for Polly retries:");
+foreach (TimeSpan item in delays)
+{
+    WriteLine($" {item.TotalSeconds:N2} seconds.");
+}
+
+AsyncRetryPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
+.HandleTransientHttpError().WaitAndRetryAsync(delays);
+
 builder.Services.AddHttpClient(name: "Northwind.WebApi.Service",
 configureClient: options =>
 {
@@ -12,7 +29,8 @@ configureClient: options =>
             "application/json", 1.0
         )
     );
-});
+})
+.AddPolicyHandler(retryPolicy);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
