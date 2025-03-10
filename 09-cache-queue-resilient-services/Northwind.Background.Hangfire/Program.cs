@@ -1,5 +1,8 @@
 using Microsoft.Data.SqlClient; // To use SqlConnectionStringBuilder.
 using Hangfire; // To use GlobalConfiguration.
+using Northwind.Background.Models;
+using Microsoft.AspNetCore.Mvc;
+
 SqlConnectionStringBuilder connection = new();
 connection.InitialCatalog = "Northwind.HangfireDb";
 connection.MultipleActiveResultSets = true;
@@ -27,4 +30,13 @@ app.UseHangfireDashboard();
 app.MapGet("/", () =>
 "Navigate to /hangfire to see the Hangfire Dashboard.");
 app.MapHangfireDashboard();
+
+app.MapPost("/schedulejob", ([FromBody] WriteMessageJobDetail job) =>
+{
+    BackgroundJob.Schedule(
+        methodCall: () => WriteMessage(job.Message),
+        enqueueAt: DateTimeOffset.UtcNow + TimeSpan.FromSeconds(job.Seconds)
+    );
+});
+
 app.Run();
