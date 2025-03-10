@@ -86,6 +86,10 @@ public class ProductsController : ControllerBase
     }
     // GET api/products/5
     [HttpGet("{id:int}")]
+    [ResponseCache(Duration = 5, // Cache-COntrol: max-age=5
+    Location = ResponseCacheLocation.Any, // Cache-Control: public
+    VaryByHeader = "User-Agent" // Vary: User-Agent
+    )]
     public async ValueTask<Product?> Get(int id)
     {
         return await _db.Products.FindAsync(id);
