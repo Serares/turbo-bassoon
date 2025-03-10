@@ -10,6 +10,8 @@ builder.Services.AddSingleton<IMemoryCache>(new MemoryCache(
         SizeLimit = 50
     }
 ));
+
+builder.Services.AddDistributedMemoryCache();
 // Add services to the container.
 builder.Services.AddNorthwindContext();
 builder.Services.AddControllers();

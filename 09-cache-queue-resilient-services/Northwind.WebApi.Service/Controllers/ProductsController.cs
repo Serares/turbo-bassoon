@@ -1,6 +1,9 @@
 using Microsoft.Extensions.Caching.Memory; // inmem cache
+using Microsoft.Extensions.Caching.Distributed; // IDistributedCache
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc; // To use [HttpGet] and so on.
 using Northwind.EntityModels; // To use NorthwindContext, Product.
+
 namespace Northwind.WebApi.Service.Controllers;
 [Route("api/products")]
 [ApiController]
@@ -10,15 +13,19 @@ public class ProductsController : ControllerBase
     private readonly ILogger<ProductsController> _logger;
     private readonly NorthwindContext _db;
     private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _distributedCache;
     private const string OutOfStockProductsKey = "OOSP";
+    private const string DiscontinuedProductsKey = "DISCP";
     public ProductsController(ILogger<ProductsController> logger,
     NorthwindContext context,
-    IMemoryCache memoryCache
+    IMemoryCache memoryCache,
+    IDistributedCache distributedCache
     )
     {
         _logger = logger;
         _db = context;
         _memoryCache = memoryCache;
+        _distributedCache = distributedCache;
     }
     // GET: api/products
     [HttpGet]
@@ -50,7 +57,7 @@ public class ProductsController : ControllerBase
         }
         MemoryCacheStatistics? stats = _memoryCache.GetCurrentStatistics();
         _logger.LogInformation("Memory cache. Total hits: {TotalHits}, Estimated size: {EstimatedSize}", stats?.TotalHits, stats?.CurrentEstimatedSize);
-        
+
         return cachedValue ?? Array.Empty<Product>();
     }
     // GET: api/products/discontinued
@@ -59,8 +66,23 @@ public class ProductsController : ControllerBase
     [Produces(typeof(Product[]))]
     public IEnumerable<Product> GetDiscontinuedProducts()
     {
-        return _db.Products
-        .Where(product => product.Discontinued);
+        byte[]? cachedValueBytes = _distributedCache.Get(DiscontinuedProductsKey);
+        Product[]? cachedValue = null;
+
+        if (cachedValueBytes is null)
+        {
+            cachedValue = GetDiscontinuedProductsFromDatabase();
+        }
+        else
+        {
+            cachedValue = JsonSerializer.Deserialize<Product[]>(cachedValueBytes);
+            if (cachedValue is null) // deserialization failed
+            {
+                cachedValue = GetDiscontinuedProductsFromDatabase();
+            }
+        }
+
+        return cachedValue ?? Enumerable.Empty<Product>();
     }
     // GET api/products/5
     [HttpGet("{id:int}")]
@@ -113,5 +135,21 @@ public class ProductsController : ControllerBase
         return NotFound();
     }
 
+    private Product[]? GetDiscontinuedProductsFromDatabase()
+    {
+        Product[]? cachedValue = _db.Products
+        .Where(product => product.Discontinued)
+        .ToArray();
+
+        DistributedCacheEntryOptions cacheEntryOptions = new()
+        {
+            SlidingExpiration = TimeSpan.FromSeconds(5),
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(20)
+        };
+
+        byte[]? cachedValueBytes = JsonSerializer.SerializeToUtf8Bytes(cachedValue);
+        _distributedCache.Set(DiscontinuedProductsKey, cachedValueBytes, cacheEntryOptions);
+        return cachedValue;
+    }
 
 }
