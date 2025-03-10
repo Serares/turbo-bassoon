@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Queue.Consumer", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Background.Workers", "Northwind.Background.Workers\Northwind.Background.Workers.csproj", "{DB50C65D-EDF9-4B00-AD9C-B2B3AD20A7E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Background.Handfier", "Northwind.Background.Handfier\Northwind.Background.Handfier.csproj", "{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{DB50C65D-EDF9-4B00-AD9C-B2B3AD20A7E7}.Release|x64.Build.0 = Release|Any CPU
 		{DB50C65D-EDF9-4B00-AD9C-B2B3AD20A7E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB50C65D-EDF9-4B00-AD9C-B2B3AD20A7E7}.Release|x86.Build.0 = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|x64.Build.0 = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Debug|x86.Build.0 = Debug|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|x64.ActiveCfg = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|x64.Build.0 = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|x86.ActiveCfg = Release|Any CPU
+		{029B9B14-54C9-4363-B0AE-27CF5E8F3C84}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
