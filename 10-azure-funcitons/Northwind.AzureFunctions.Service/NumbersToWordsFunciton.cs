@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Northwind.AzureFunctions.Service
@@ -11,10 +12,14 @@ namespace Northwind.AzureFunctions.Service
     public class NumbersToWordsFunciton
     {
         private readonly ILogger<NumbersToWordsFunciton> _logger;
+        private readonly HttpClient _amazonClient;
 
-        public NumbersToWordsFunciton(ILogger<NumbersToWordsFunciton> logger)
+        public NumbersToWordsFunciton(
+            ILogger<NumbersToWordsFunciton> logger,
+            IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
+            _amazonClient = httpClientFactory.CreateClient("AmazonClient");
         }
 
         [Function("NumbersToWordsFunciton")]
