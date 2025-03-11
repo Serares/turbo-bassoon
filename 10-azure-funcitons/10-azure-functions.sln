@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCrontab.Console", "NCrontab.Console\NCrontab.Console.csproj", "{347243EE-1551-4C23-B962-F4538B10360B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.AzureFunctions.Service", "Northwind.AzureFunctions.Service\Northwind.AzureFunctions.Service.csproj", "{2BD40580-A036-43DD-9511-918727062709}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{347243EE-1551-4C23-B962-F4538B10360B}.Release|x64.Build.0 = Release|Any CPU
 		{347243EE-1551-4C23-B962-F4538B10360B}.Release|x86.ActiveCfg = Release|Any CPU
 		{347243EE-1551-4C23-B962-F4538B10360B}.Release|x86.Build.0 = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|x64.Build.0 = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Debug|x86.Build.0 = Debug|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|x64.ActiveCfg = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|x64.Build.0 = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|x86.ActiveCfg = Release|Any CPU
+		{2BD40580-A036-43DD-9511-918727062709}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
