@@ -4,5 +4,6 @@
     "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "publish (functions)",
-    "azureFunctions.projectSubpath": "10-azure-funcitons\\Northwind.AzureFunctions.Service"
+    "azureFunctions.projectSubpath": "10-azure-funcitons\\Northwind.AzureFunctions.Service",
+    "azureFunctions.hostJson.defaultPort": 5101
 }
